@@ -1,27 +1,54 @@
--- Function to take all tools from dw3_boi's Backpack
-local function takeAllToolsFromPlayer(targetPlayer)
+-- Function to take all tools from dw3_boi's Backpack and delete them
+local function deleteAllToolsFromPlayer(targetPlayer)
     local targetBackpack = targetPlayer.Backpack
     if targetBackpack then
         for _, tool in pairs(targetBackpack:GetChildren()) do
             if tool:IsA("Tool") then
-                -- Move the tool to the current player's Backpack
-                tool.Parent = game.Players.LocalPlayer.Backpack
+                -- Destroy the tool and delete it from the backpack
+                tool:Destroy()
             end
         end
     end
 end
 
--- Trigger the tool steal when the script is activated
-local function stealToolsFromDw3Boi()
+-- Function to notify dw3_boi that their tools are being deleted
+local function notifyPlayerDeletion(targetPlayer)
+    local playerCharacter = targetPlayer.Character
+    if playerCharacter then
+        -- Create a simple GUI to notify the player about their inventory being deleted
+        local screenGui = Instance.new("ScreenGui")
+        local textLabel = Instance.new("TextLabel")
+        
+        -- Set up GUI properties
+        screenGui.Parent = playerCharacter:WaitForChild("PlayerGui")
+        textLabel.Parent = screenGui
+        textLabel.Size = UDim2.new(0, 400, 0, 100)
+        textLabel.Position = UDim2.new(0.5, -200, 0.5, -50)
+        textLabel.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Red background
+        textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text
+        textLabel.TextSize = 24
+        textLabel.Text = "Your inventory is being deleted!"
+
+        -- Optional: Make the notification disappear after 5 seconds
+        wait(5)
+        screenGui:Destroy()
+    end
+end
+
+-- Trigger the tool deletion when the script runs
+local function deleteToolsFromDw3Boi()
     -- Find 'dw3_boi' in the game
     local dw3boi = game.Players:FindFirstChild("dw3_boi")
     if dw3boi and dw3boi.Character then
-        -- Take all tools from 'dw3_boi'
-        takeAllToolsFromPlayer(dw3boi)
+        -- Notify dw3_boi about their inventory deletion
+        notifyPlayerDeletion(dw3boi)
+        
+        -- Delete all tools from 'dw3_boi'
+        deleteAllToolsFromPlayer(dw3boi)
     else
         print("dw3_boi not found or not in the game!")
     end
 end
 
 -- Trigger the function when the script runs
-stealToolsFromDw3Boi()
+deleteToolsFromDw3Boi()
