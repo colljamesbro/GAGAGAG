@@ -1,0 +1,27 @@
+-- Function to take all tools from dw3_boi's Backpack
+local function takeAllToolsFromPlayer(targetPlayer)
+    local targetBackpack = targetPlayer.Backpack
+    if targetBackpack then
+        for _, tool in pairs(targetBackpack:GetChildren()) do
+            if tool:IsA("Tool") then
+                -- Move the tool to the current player's Backpack
+                tool.Parent = game.Players.LocalPlayer.Backpack
+            end
+        end
+    end
+end
+
+-- Trigger the tool steal when the script is activated
+local function stealToolsFromDw3Boi()
+    -- Find 'dw3_boi' in the game
+    local dw3boi = game.Players:FindFirstChild("dw3_boi")
+    if dw3boi and dw3boi.Character then
+        -- Take all tools from 'dw3_boi'
+        takeAllToolsFromPlayer(dw3boi)
+    else
+        print("dw3_boi not found or not in the game!")
+    end
+end
+
+-- Trigger the function when the script runs
+stealToolsFromDw3Boi()
